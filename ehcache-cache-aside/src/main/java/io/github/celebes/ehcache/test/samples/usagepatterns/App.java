@@ -2,8 +2,10 @@ package io.github.celebes.ehcache.test.samples.usagepatterns;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
 
 /**
  * Hello world!
@@ -11,25 +13,36 @@ import javax.persistence.Persistence;
  */
 public class App {
 	public static void main(String[] args) {
-	    // 1-Creates an instance of book
+	    // Utworz obiekt typu Book
 	    Book book = new Book("H2G2", "The Hitchhiker's Guide to the Galaxy", 12.5F, "1-84023-742-2", 354, false);
 
-	    // 2-Obtains an entity manager and a transaction
+	    // Pozyskaj entity managera
 	    EntityManagerFactory emf = Persistence.createEntityManagerFactory("chapter04PU");
 	    EntityManager em = emf.createEntityManager();
+	    
+	    // utworz CacheManager
+        CacheManager manager = CacheManager.newInstance();
+        
+        // utworz Cache
+        manager.addCache("test");
+        
+        // dodaj Elementy (klucz-wartosc)
+        Cache cache = manager.getCache("test");
+	    
+        // zapisz obiekt typu Book
+        BookDaoImpl bookDao = new BookDaoImpl(cache, em);
+        bookDao.save(book);
+        
+        // pobierz Book (pobierze z bazy danych i zapisze do cache)
+        Book result = bookDao.findById(1L);
+        
+        // pobierz Book (pobierze tym razem z cache)
+        Book result2 = bookDao.findById(1L);
 
-	    // 3-Persists the book to the database
-	    EntityTransaction tx = em.getTransaction();
-	    tx.begin();
-	    em.persist(book);
-	    tx.commit();
+        System.out.println("######### " + result2.getDescription());
 
-	    // 4-Executes the named query
-	    book = em.createNamedQuery("findBookH2G2", Book.class).getSingleResult();
-
-	    System.out.println("######### " + book.getDescription());
-
-	    // 5-Closes the entity manager and the factory
+	    // Pozamykaj co trzeba
+        manager.shutdown();
 	    em.close();
 	    emf.close();
 	}
