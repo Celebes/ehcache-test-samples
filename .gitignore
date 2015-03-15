@@ -33,3 +33,9 @@ target/
 
 # Locally stored "Eclipse launch configurations"
 *.launch
+
+# Derby
+chapter04DB/
+chapter04Create.ddl
+chapter04Drop.ddl
+derby.log
