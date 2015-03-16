@@ -7,15 +7,10 @@ import javax.persistence.Persistence;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 
-/**
- * Hello world!
- *
- */
 public class App {
 	public static void main(String[] args) {
 	    // Utworz obiekt typu Book
 	    Book book = new Book("H2G2", "The Hitchhiker's Guide to the Galaxy", 12.5F, "1-84023-742-2", 354, false);
-
 	    // Pozyskaj entity managera
 	    EntityManagerFactory emf = Persistence.createEntityManagerFactory("chapter04PU");
 	    EntityManager em = emf.createEntityManager();
