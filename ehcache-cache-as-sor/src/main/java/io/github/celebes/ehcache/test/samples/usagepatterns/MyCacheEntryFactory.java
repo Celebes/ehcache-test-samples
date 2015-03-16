@@ -2,11 +2,10 @@ package io.github.celebes.ehcache.test.samples.usagepatterns;
 
 import javax.persistence.EntityManager;
 
-import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
 
 /*
- * pozwala cache na skorzystanie z wzorca read-through
+ * pozwala cache na skorzystanie ze wzorca read-through
  */
 
 public class MyCacheEntryFactory implements CacheEntryFactory {
@@ -14,10 +13,8 @@ public class MyCacheEntryFactory implements CacheEntryFactory {
 	
 	@Override
 	public Object createEntry(Object key) throws Exception {
-		System.out.println("MyCacheEntryFactory -> createEntry");
-		System.out.println("KEY = " + key);
+		System.out.println("MyCacheEntryFactory -> createEntry()");
 		Long id = (Long)key;
-		System.out.println("ID = " + id);
 		return em.createNamedQuery("findBookById", Book.class).setParameter("id", id).getSingleResult();
 	}
 	

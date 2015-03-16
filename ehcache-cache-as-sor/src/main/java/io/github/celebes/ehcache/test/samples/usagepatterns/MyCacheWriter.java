@@ -32,6 +32,7 @@ public class MyCacheWriter implements CacheWriter {
 
 	@Override
 	public void write(Element element) throws CacheException {
+		System.out.println("MyCacheWriter -> write()");
 		EntityTransaction tx = em.getTransaction();
 	    tx.begin();
 	    em.persist((Book)element.getObjectValue());
